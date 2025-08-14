@@ -45,4 +45,32 @@ def cargar_peliculas():
                   print("Asegurate que este en la misma carpeta que main.py")
                   return None
             
-            with open('peliculas.json')
+            with open('peliculas.json', 'r', encoding='utf-8') as archivo:
+                  peliculas = json.load(archivo)
+                  
+                  if not peliculas:
+                        print("Error: El archivo JSON esta vacio")
+                        return None
+                  
+                  return peliculas
+            
+      except json.JSONDecodeError as e:
+            print(f"Error: El archivo JSON tiene formato incorrecto")
+            print(f"Detalle del Error: {e}")
+            return None
+      except Exception as e:
+            print(f"Error inesperado: {e}")
+            return None
+      
+      def mostrar_estadisticas_carga(peliculas):
+            """
+            Muestra estadisticas de las peliculas cargadas
+
+            Args:
+            peliculas (dict): Diccionario con las peliculas
+            """
+
+            if not peliculas:
+                  return
+            
+            print("Estadisticas de carga")
