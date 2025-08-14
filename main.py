@@ -45,4 +45,4 @@ def cargar_peliculas():
                   print("Asegurate que este en la misma carpeta que main.py")
                   return None
             
-            with open()
+            with open('peliculas.json')
