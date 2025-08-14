@@ -74,3 +74,10 @@ def cargar_peliculas():
                   return
             
             print("Estadisticas de carga")
+            print("=" * 30)
+
+            total_pelculas = 0
+            for genero, Lista_de_peliculas in peliculas.items():
+                  cantidad = len(Lista_de_peliculas)
+                  total_peliculas += cantidad
+                  print(f"{genero.replace('-','').title()}: {cantidad} peliculas")
