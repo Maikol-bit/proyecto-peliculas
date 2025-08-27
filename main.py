@@ -14,22 +14,9 @@ import sys
 favoritas = []
 historial = []
 
-def main():
-    """Función pirncipal del programa"""
-    print("Iniciando netflix console...")
-
-    print("Programa iniciado correctamente")
-
-if __name__ == "__main__":
-        main()
-
-
 """
 NETFLIX CONSOLE - Carga de datos JSON
 """
-
-import json
-import os
 
 def cargar_peliculas():
       """
@@ -97,28 +84,6 @@ def mostrar_estadisticas_carga(peliculas):
             if mejor_pelicula:
                   print(f"Mejor calificada: {mejor_pelicula['titulo']} ({mejor_rating}/10)")
 
-def main():
-            """Funcion principal del programa"""
-            print("Netflix Console - Cargando Datos...")
-            print("=" * 50)
-
-            print("Cargando peliculas desde peliculas.json...")
-            peliculas = cargar_peliculas()
-
-            if peliculas:
-                  print("Peliculas cargadas exitosmente")
-                  mostrar_estadisticas_carga(peliculas)
-
-            else:
-                  print("Error: no se pudieron cargar las peliculas")
-                  print("Revisa que el archivo de peliculas.json este en la carpeta correcta")
-                  return
-            
-            print("\n Sistema listo para usar")
-
-if __name__ == "__main__":
-            main()
-
 def limpiar_pantalla():
       """Limpia la pantalla de la consola"""
       os.system('cls' if os.name == 'nt' else 'clear')
@@ -156,33 +121,75 @@ def obtener_opcion_usuario():
       """
       while True:
             try:
-                     opcion = input("\n Elije una opcion (0-9): ").strip()
+                  opcion = input("\n Elije una opcion (0-9): ").strip()
 
-                     if opcion in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
-                            return opcion
-                     else:
-                            print("Opcion no valida. Usa numeros del 0 al 9.")
+                  if opcion in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
+                        return opcion
+                  else:
+                        print("Opcion no valida. Usa numeros del 0 al 9.")
 
             except KeyboardInterrupt:
-                     print("\n\n Hasta luego")
-                     sys.exit(0)
+                  print("\n\n Hasta luego")
+                  sys.exit(0)
             except Exception as e:
-                     print(f"Error: {e}")
+                  print(f"Error: {e}")
 
 def pausar():
-       """Pausa el programa hasta que el usuario presione Enter"""
-       input("\n Presiona Enter para continuar...")
+      """Pausa el programa hasta que el usuario presione Enter"""
+      input("\n Presiona Enter para continuar...")
+      
+def procesar_seleccion_genero(peliculas, genero, nombre_genero):
+      """
+      Procesa la navegación completa de un género
+      
+      Args:
+            peliculas (dict): Diccionario con todas las películas
+            genero (str): Clave del género
+            nombre_genero (str): Nombre del género para mostrar
+      """
+      while True:
+            pelicula_seleccionada = mostrar_peliculas_genero(peliculas, genero, nombre_genero)
+            if pelicula_seleccionada is None:
+                  break
+            
+            print(f"\n Seleccionaste: {pelicula_seleccionada['titulo']}")
+            print("Funcion de detalles en desarrollo")
+            pausar()
 
 def main():
+      
+      """Función pirncipal del programa"""
+      print("Iniciando netflix console...")
+
+      print("Programa iniciado correctamente")
+      
+      """Funcion principal del programa"""
+      print("Netflix Console - Cargando Datos...")
+      print("=" * 50)
+
+      print("Cargando peliculas desde peliculas.json...")
+      peliculas = cargar_peliculas()
+
+      if peliculas:
+            print("Peliculas cargadas exitosmente")
+            mostrar_estadisticas_carga(peliculas)
+
+      else:
+            print("Error: no se pudieron cargar las peliculas")
+            print("Revisa que el archivo de peliculas.json este en la carpeta correcta")
+            return
+      
+      print("\n Sistema listo para usar")
+      
       """Funcion principal del menu interactivo"""
 
-      print(" Iniciando Netflix Console...")
+      print("Iniciando Netflix Console...")
       peliculas = cargar_peliculas()
 
       if not peliculas:
-              print("No se puede continuar sin las peliculas")
-              return
-       
+            print("No se puede continuar sin las peliculas")
+            return
+      
       print("Sistema cargado correctamente")
       pausar()
 
@@ -191,56 +198,111 @@ def main():
             mostrar_header()
             mostrar_menu_principal()
 
-            opcion = obtener_opcion_usuario
+            opcion = obtener_opcion_usuario()
 
             if opcion == "0":
-                     limpiar_pantalla()
-                     print("Gracias por usar Netflix Console")
-                     print("Que disfruts viendo peliculas")
-                     print("Hasta la proxima")
+                  limpiar_pantalla()
+                  print("Gracias por usar Netflix Console")
+                  print("Que disfrutes viendo peliculas")
+                  print("Hasta la proxima")
+                  break
 
             elif opcion == "1":
-                     print("\n Has elegido: Peliculas de accion")
-                     print("Funcion en desarrollo...")
-                     pausar()
-
+                  procesar_seleccion_genero(peliculas, "accion", "ACCION")
+                  pausar()
+                  
             elif opcion == "2":
-                     print("\n Has elejido: Peliculas de comedia")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  procesar_seleccion_genero(peliculas, "comedia", "COMEDIA")
 
             elif opcion == "3":
-                     print("\n Has elejido: Peliculas de terror")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  procesar_seleccion_genero(peliculas, "terror", "TERROR")
 
             elif opcion == "4":
-                     print("\n Has elejido: Peliculas de romance")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  procesar_seleccion_genero(peliculas, "romance", "ROMANCE")
 
             elif opcion == "5":
-                     print("\n Has elejido: Peliculas de ciencia ficcion")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  procesar_seleccion_genero(peliculas, "ciencia_ficcion", "CIENCIA_FICCION")
 
             elif opcion == "6":
-                     print("\n Has elejido: Buscar pelicula")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  print("\n Has elejido: Buscar pelicula")
+                  print("Funcion en desarrollo...")
+                  pausar()
 
             elif opcion == "7":
-                     print("\n Has elijido: Top 10")
-                     print("Funcion en desarrollo...")
-                     pausar()
+                  print("\n Has elijido: Top 10")
+                  print("Funcion en desarrollo...")
+                  pausar()
 
             elif opcion == "8":
-                     print("\n Has elegido: Mis favoritas")
-                     print("Funcion en desarrollo")
-                     pausar()
+                  print("\n Has elegido: Mis favoritas")
+                  print("Funcion en desarrollo")
+                  pausar()
 
             elif opcion == "9":
-                     limpiar_pantalla()
-                     mostrar_header()
-                     mostrar_estadisticas_carga()
-                     pausar()
+                  limpiar_pantalla()
+                  mostrar_header()
+                  mostrar_estadisticas_carga(peliculas)
+                  pausar()
+                  
+      
+def mostrar_peliculas_genero(peliculas, genero, nombre_genero):
+      """
+      Muestra todas las peliculas de un genero especifico
+      
+      Args:
+            peliculas (dict): Diccionario con todas las peliculas
+            gereno (str): Clave del género para mostrar
+      """
+      limpiar_pantalla()
+      
+      print("🎬" + f"PELICULAS DE {nombre_genero.upper()}" + "🎬")
+      print("=" * 60)
+      
+      lista_peliculas = peliculas[genero]
+      
+      print(f"{'#':<3} {'TITULO': <35} {'AÑO': <6} {'RATING':<8}")
+      print("-" * 60)
+      
+      for i, pelicula in enumerate(lista_peliculas, 1): titulo = pelicula['titulo']
+      if len(titulo) >32:
+            titulo = titulo[:29] + "..."
+            
+      print(f"{i:<3} {titulo:<35} {pelicula['año']:<6} {pelicula['rating']:<7}")
+      
+      print("-" * 60)
+      print(f"{len(lista_peliculas) + 1}. Volver al menu principal")
+      
+      return
+      seleccionar_pelicula_genero(lista_peliculas)
+      
+def seleccionar_pelicula_genero(lista_peliculas):
+      """
+      permite al usuario seleccionar una pelicula de la lista
+      
+      Args:
+      lista_peliculas (lits): Lista de peliculas del genero
+      
+      Returns:
+      dict or None: Pelicula seleccionada o None si vuelve al menu
+      """
+      while True:
+            try:
+                  print(f"\n Elije una pelicila (1-{len(lista_peliculas)}) o {len(lista_peliculas) + 1}para volver: ", end="")
+                  opcion = input().strip()
+                  
+                  if opcion == str(len(lista_peliculas) + 1):
+                        return None
+                  
+                  numero = int(opcion)
+                  if 1 <=numero <= len(lista_peliculas):
+                        return lista_peliculas[numero - 1]
+                  else:
+                        print(f" Numero fuera de rango. Usa 1-{len(lista_peliculas)} o {len(lista_peliculas) + 1}")
+                        
+            except ValueError:
+                  print(" Por favor ingrese un numero valido")
+            except KeyboardInterrupt:
+                  return None
+
+if __name__ == "__main__":
+      main()
