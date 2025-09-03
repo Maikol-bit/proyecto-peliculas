@@ -213,16 +213,20 @@ def main():
                   
             elif opcion == "2":
                   procesar_seleccion_genero(peliculas, "comedia", "COMEDIA")
+                  pausar()
 
             elif opcion == "3":
                   procesar_seleccion_genero(peliculas, "terror", "TERROR")
+                  pausar()
 
             elif opcion == "4":
                   procesar_seleccion_genero(peliculas, "romance", "ROMANCE")
-
+                  pausar()
+                  
             elif opcion == "5":
                   procesar_seleccion_genero(peliculas, "ciencia_ficcion", "CIENCIA_FICCION")
-
+                  pausar()
+                  
             elif opcion == "6":
                   print("\n Has elejido: Buscar pelicula")
                   print("Funcion en desarrollo...")
@@ -303,6 +307,139 @@ def seleccionar_pelicula_genero(lista_peliculas):
                   print(" Por favor ingrese un numero valido")
             except KeyboardInterrupt:
                   return None
+            
+def procesar_seleccion_genero(peliculas, genero, nombre_genero):
+      """
+      Procesa la navegacion completa de un genero
+      
+      Args:
+            peliculas (dict): Diccionario con todas las peliculas
+            genero (str): Clave del genero
+            nombre-genero (str): Nombre del genero para mostrar
+      """
+      while True:
+            peliculas_seleccionada = mostrar_peliculas_genero(peliculas, genero, nombre_genero)
+
+            if peliculas_seleccionada is None:
+                  break
+            print(f"\n Seleccionaste: {peliculas_seleccionada['titulo']}")
+            print(" Funcion de detalles en desarrollo...")
+            pausar()
+def mostrar_detalle_pelicula(pelicula):
+      """
+      Muestra todos los detalles de una pelicula
+      
+      Args:
+            pelicula (dict): Diccionario con los datos de la pelicula
+      """
+      limpiar_pantalla()
+
+      print("🎬" + "=" * 58 + "🎬")
+      titulo = pelicula['titulo'].upper()
+      espacios = (60 - len(titulo)) //2
+      print(" " * espacios + titulo + " " * espacios)
+
+      print(f"\n Año: {pelicula['año']}")
+      print(f"Duracion: {pelicula['duracion']}")
+      print(f"Rating: {pelicula['rating']}/10")
+      print(f"Director: {pelicula['director']}")
+      print(f"Actores principales: {pelicula['actores']}")
+
+      print(f"\n SINOPSIS:")
+      print("-" * 60)
+      sinopsis = pelicula['sinopsis']
+      palabras = sinopsis.split()
+      linea_actual = ""
+
+      for palabra in palabras:
+            if len(linea_actual + palabra) <= 57:
+                  linea_actual += palabra + " "
+            else:
+                  print(linea_actual.strip())
+                  linea_actual = palabra + " "
+      if linea_actual:
+            print(linea_actual.strip())
+
+      print ("-" * 60)
+      return mostrar_opciones_pelicula(pelicula)
+
+def mostrar_opciones_pelicula(pelicula):
+      """
+      Muestra las opciones disponibles para una pelicula
+
+      Args:
+            pelicula (dict): Diccionario con los datos de la pelicula
+
+      Returns:
+            str: Accion seleccionada por el usuario
+      """
+      print("\n🎯 ¿QUÉ QUIERES HACER?")
+      print("━" * 30)
+      print("1. 🍿 'Ver' esta película")
+      print("2. ❤️ Agregar a favoritas")
+      print("3. 📊 Ver más estadísticas")
+      print("4. ⬅️ Volver a la lista")
+      print("5. 🏠 Volver al menú principal")
+      print("━" * 30)
+
+      while True:
+            try:
+                  opcion = input("\n Elije una opcion (1-5):").strip()
+
+                  if opcion == "1":
+                        return simular_reproduccion(pelicula)
+                  elif opcion == "2":
+                        return agregar_a_favoritas(pelicula)
+                  elif opcion == "3":
+                        return mostrar_estadisticas_peliculas(pelicula)
+                  elif opcion == "4":
+                        return "volver_lista"
+                  elif opcion == "5":
+                        return "menu_principal"
+                  else:
+                        print("Opcion no valida. Usa numeros del 1 al 5")
+
+            except KeyboardInterrupt:
+                  return "menu_principal"
+            
+def simular_reproduccion(pelicula):
+      """
+      Simula la reporduccion de una pelicula
+      
+      Args:
+            pelicula (dict): Diccionario con los datos de la pelicula
+      """
+      limpiar_pantalla()
+      print("🎬" + "=" * 58 + "🎬")
+      print(f" Reporduciendo: {pelicula['titulo']}")
+      print("🎬" + "=" * 58 + "🎬")
+      print("\n *Musica epica de apertura* ")
+      print(" *Titulos iniciales aparecen* ")
+      print(" *Te acomodas en tu asiento virtual* ")
+      print(" *La magia del cine comienza* ")
+      
+      print(f"\n Disfrutando de '{pelicula['titulo']}'...")
+      print(f" Duracion: {pelicula['duracion']}")
+      print(" *Actuaciones increibles en pantalla*")
+      print(" *Banda sonora epica*")
+      
+      input("\n Presione enter cuando 'termines' de ver la pelicula...")
+      if pelicula not in historial:
+            historial.append(pelicula)
+
+      print("\n ¡Pelicula terminada!")
+      print(" ¡Esperamos la haya disfrutado!")
+      print(f" '{pelicula['titulo']}'agregada a tu historial")
+      
+      pausar()
+      return "volver_detalle"
+
+def agregar_a_favoritas(pelicula):
+      """
+      Agrega una pelicula a la lista de favoritas
+      
+      Args:
+            pelicula (dict): Dicciona"""
 
 if __name__ == "__main__":
       main()
