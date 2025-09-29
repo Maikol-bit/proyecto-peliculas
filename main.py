@@ -175,8 +175,13 @@ def mostrar_peliculas_genero(peliculas, genero, nombre_genero):
             gereno (str): Clave del género para mostrar
       """
       limpiar_pantalla()
+
+      emoji = obtener_emoji_genero(genero)
+      mensaje = obtener_mensaje_genero(genero)
       
-      print("🎬" + f"PELICULAS DE {nombre_genero.upper()}" + "🎬")
+      print(f"{emoji} Peliculas de {nombre_genero.upper()} {emoji}")
+      print("=" * 60)
+      print(f"{mensaje}")
       print("=" * 60)
       
       lista_peliculas = peliculas[genero]
@@ -235,11 +240,11 @@ def procesar_seleccion_genero(peliculas, genero, nombre_genero):
             nombre_genero (str): Nombre del genero para mostrar
       """
       while True:
-            peliculas_seleccionada = mostrar_peliculas_genero(peliculas, genero, nombre_genero)
+            pelicula_seleccionada = mostrar_peliculas_genero(peliculas, genero, nombre_genero)
 
-            if peliculas_seleccionada is None:
+            if pelicula_seleccionada is None:
                   break
-            print(f"\n Seleccionaste: {peliculas_seleccionada['titulo']}")
+            print(f"\n Seleccionaste: {pelicula_seleccionada['titulo']}")
             print(" Funcion de detalles en desarrollo...")
             pausar()
 def mostrar_detalle_pelicula(pelicula):
@@ -330,6 +335,7 @@ def simular_reproduccion(pelicula):
       print("🎬" + "=" * 58 + "🎬")
       print(f" Reporduciendo: {pelicula['titulo']}")
       print("🎬" + "=" * 58 + "🎬")
+
       print("\n *Musica epica de apertura* ")
       print(" *Titulos iniciales aparecen* ")
       print(" *Te acomodas en tu asiento virtual* ")
@@ -413,6 +419,329 @@ def mostrar_estadisticas_pelicula(pelicula):
       
       pausar()
       return "volver_detalle"
+
+def obtener_emoji_genero(genero):
+      """
+      Obtiene el emoji correspondiente a cada género
+
+      Args:
+      genero (str): Nombre del género
+      
+      Returns:
+      str: Emoji del género
+      """
+
+      emojis = {
+            "accion": "🔥",
+            "comedia": "😂",
+            "terror": "👻",
+            "romance": "❤️",
+            "ciencia_ficcion": "🚀"
+      }
+      return emojis.get(genero, "🎬")
+
+def obtener_mensaje_genero(genero):
+      """
+      Obtiene un mensaje personalizado para cada género
+      
+      Args:
+            genero (str): Nombre del género
+            
+      Returns:
+            str: Mensaje personalizado
+      """
+      mensajes = {
+            "accion": "¡Prepárate para la adrenalina y la aventura!",
+            "comedia": "¡Listos para reír hasta que te duela la barriga!",
+            "terror": "¡Prepárate para sustos y emociones fuertes!",
+            "romance": "¡Historias de amor que te llegarán al corazón!",
+            "ciencia_ficcion": "¡Viaja al futuro y explora nuevos mundos!"
+      }
+      return mensajes.get(genero, "Disfrute de estas peliculas")
+
+def buscar_peliculas(peliculas):
+      """
+      Permite buscar películas por título
+      
+      Args:
+            peliculas (dict): Diccionario con todas las películas
+      """
+      limpiar_pantalla()
+
+      print("🔍 BÚSQUEDA DE PELÍCULAS")
+      print("=" * 40)
+      print("💡 Consejo: Puedes buscar por título completo o parcial")
+      print("💡 Ejemplo: 'batman', 'star', 'love', etc.")
+      print("=" * 40)
+
+      termino = input("\n Escribe el titulo o parte de este:").strip()
+
+      if not termino:
+            print("Debes esribir algo para buscar")
+            pausar()
+            return
+      
+      resultados = []
+
+      for nombre_genero, lista_peliculas in peliculas.items():
+            for pelicula in lista_peliculas:
+                  if termino.lower() in pelicula['titulo'].lower():
+                        resultados.append((pelicula, nombre_genero))
+
+      mostrar_resultados_busqueda(resultados, termino)
+
+def mostrar_resultados_busqueda(resultados, termino):
+      """
+      Muestra los resultados de una búsqueda
+      
+      Args:
+            resultados (list): Lista de tuplas (pelicula, genero)
+            termino (str): Término buscado
+      """
+      limpiar_pantalla()
+
+      if not resultados:
+            print("🔍 RESULTADOS DE BÚSQUEDA")
+            print("=" * 40)
+            print(f"❌ No se encontraron películas con '{termino}'")
+            print("\n💡 Sugerencias:")
+            print("   • Verifica la ortografía")
+            print("   • Intenta con menos palabras")
+            print("   • Usa solo parte del título")
+            pausar()
+            return
+      
+      print("🔍 RESULTADOS DE BÚSQUEDA")
+      print("=" * 60)
+      print(f"🎯 Término buscado: '{termino}'")
+      print(f"📊 Se encontraron {len(resultados)} película(s)")
+      print("=" * 60)
+
+      print(f"{'#':<3} {'Titulo':<30} {'Genero':<12} {'Año':<6} {'Rating'}")
+      print("-" * 60)
+
+      for i, (pelicula, genero) in enumerate(resultados, 1):
+            titulo = pelicula['titulo']
+            if len(titulo) > 27:
+                  titulo = titulo[:24] + "..."
+
+            genero_mostrar = genero.replace('_',' '). title()
+            if len(genero_mostrar) > 9:
+                  genero_mostrar = genero_mostrar[:9] + "."
+
+            print(f"{i:<3} {titulo:<30} {genero_mostrar:<12} {pelicula['año']:<6} ⭐{pelicula['rating']}")
+
+      print("-" * 60)
+      print(f"{len(resultados) + 1}. Volver al menu principal")
+
+      seleccionar_de_busqueda(resultados)
+
+def seleccionar_de_busqueda(resultados):
+      """
+      Permite seleccionar una película de los resultados de búsqueda
+      
+      Args:
+            resultados (list): Lista de tuplas (pelicula, genero)
+      """
+      while True:
+            try:
+                  print(f"\n👉 Elige una película (1-{len(resultados)}) o {len(resultados) + 1} para volver: ", end="")
+                  opcion = input().strip()
+
+                  if opcion ==str(len(resultados) + 1):
+                        return
+                  
+                  numero = int(opcion)
+                  if 1 <= numero <= len(resultados):
+                        pelicula_seleccionada = resultados[numero - 1][10]
+
+                        while True:
+                              accion = mostrar_detalle_pelicula(pelicula_seleccionada)
+
+                              if accion == "volver_lista":
+                                    return
+                              elif accion == "menu_principal":
+                                    return
+                              elif accion == "volver_detalle":
+                                    continue
+                  else:
+                        print(f"❌ Número fuera de rango. Usa 1-{len(resultados)} o {len(resultados) + 1}")
+                        
+            except ValueError:
+                  print("Por favor ingresa un numero valido")
+            except KeyboardInterrupt:
+                  return
+            
+def busqueda_avanzada(peliculas):
+      """
+      Búsqueda avanzada con múltiples filtros
+      
+      Args:
+            peliculas (dict): Diccionario con todas las películas
+      """
+      limpiar_pantalla()
+
+      print("🔍 BÚSQUEDA AVANZADA")
+      print("=" * 40)
+      print("1. 🎬 Buscar por título")
+      print("2. 🎭 Buscar por director")
+      print("3. 👥 Buscar por actor")
+      print("4. 📅 Buscar por año")
+      print("5. ⭐ Buscar por rating mínimo")
+      print("6. ⬅️ Volver al menú")
+      print("=" * 40)
+
+      while True:
+            try:
+                  opcion = input("\n Elige tipo de busqueda (1-6): ").strip()
+
+                  if opcion == "1":
+                        buscar_peliculas(peliculas)
+                        break
+                  elif opcion == "2":
+                        buscar_por_director(peliculas)
+                        break
+                  elif opcion == "3":
+                        buscar_por_actor(peliculas)
+                        break
+                  elif opcion == "4":
+                        buscar_por_año(peliculas)
+                        break
+                  elif opcion == "5":
+                        buscar_por_rating(peliculas)
+                        break
+                  elif opcion == "6":
+                        busqueda_avanzada(peliculas)
+                        break
+                  else:
+                        print("Opcion no valida. Usa numeros del 1 al 6")
+
+            except KeyboardInterrupt:
+                  break
+
+def buscar_por_director(peliculas):
+      """Busca peliculas por director"""
+      termino = input ("\n Escribe el nombre del director: ").strip()
+      if not termino:
+            return
+      
+      resultados = []
+      for genero, lista_peliculas in peliculas.items():
+            for pelicula in lista_peliculas:
+                  if termino.lower() in pelicula['director'].lower():
+                        resultados.append((pelicula, genero))
+
+      mostrar_resultados_busqueda(resultados, f"director: {termino}")
+
+def buscar_por_actor(peliculas):
+      """Busca peliculas por actor"""
+      termino = input("\n Escribe el nombre del actor: ").strip()
+      if not termino:
+            return
+      
+      resultados = []
+      for genero, lista_peliculas in peliculas.items():
+            for pelicula in lista_peliculas:
+                  if termino.lower() in pelicula['actores'].lower():
+                        resultados.append((pelicula, genero))
+
+      mostrar_resultados_busqueda(resultados, f"actor : {termino}")
+
+def buscar_por_año(peliculas):
+      """Busca peliculas por año"""
+      try:
+            año = int(input("\nEscribe el año: ").strip())
+
+            resultados = []
+            for genero, lista_peliculas in peliculas.items():
+                  for pelicula in lista_peliculas:
+                        if pelicula['año'] == año:
+                              resultados.append((pelicula, genero))
+      
+            mostrar_resultados_busqueda(resultados, f"año: {año}")
+
+      except ValueError:
+            print("Por favor ingresa un año valido")
+            pausar()
+
+def buscar_por_rating(peliculas):
+      """Buscar peliculas por rating minimo"""
+      try:
+            rating_min = float(input("\nEscribe el rating minimo (ej: 8.0):").strip())
+
+            resultados = []
+            for genero, lista_peliculas in peliculas.items():
+                  for pelicula in lista_peliculas:
+                        if pelicula['rating'] >= rating_min:
+                              resultados.append((pelicula, genero))
+
+            mostrar_resultados_busqueda(resultados, f"rating ≥ {rating_min}")
+
+      except ValueError:
+            print("Por favor ingresa un numero valido")
+            pausar()
+
+def mostrar_top_10(peliculas):
+      """
+      Muestra las 10 peliculas mejor calificadas
+      
+      Args:
+            peliculas (dict): Diccionario con todas las peliculas
+      """
+      limpiar_pantalla()
+
+      print("Top 10 Peliculas mejor calificadas")
+      print("=" * 60)
+
+      todas_peliculas = []
+      for genero, lista_peliculas in peliculas.items():
+            for pelicula in lista_peliculas:
+                  todas_peliculas.append((pelicula, genero))
+
+      todas_peliculas.sort(key=lambda x: x [0]['rating'], reverse=True)
+
+      top_10 = todas_peliculas[:10]
+
+      print("Las mejores peliculas segun su calificacion")
+      print("=" * 60)
+      print(f"{'POS' :<4} {'Titulo' :<30} {'Genero' :<12} {'Rating':<8} {'año'}")
+      print("-" * 60)
+
+      for i, (pelicula, genero) in enumerate(top_10, 1):
+            if i == 1:
+                  pos = "🥇"
+            elif i == 2:
+                  pos = "🥈"
+            elif i == 3:
+                  pos = "🥉"
+            else:
+                  pos = f"{i:2d}."
+
+            titulo = pelicula['Titulo']
+            if len(titulo) > 27:
+                  titulo = titulo[:24] + "..."
+
+            genero_mostrar = genero.replace('_', ' ').title()
+            if len(genero_mostrar) > 9:
+                  genero_mostrar = genero_mostrar[:9] + "."
+
+            print(f"{pos:<4} {titulo:<30} {genero_mostrar:<12} ⭐{pelicula['rating']:<7} {pelicula['año']}")
+      
+      print("━" * 60)
+      print(f"11. ⬅️ Volver al menú principal")
+
+      seleccionar_del_top_10(top_10)
+
+def seleccionar_del_top_10(top_10):
+      """
+      Permite seleccionar una película del top 10
+      
+      Args:
+            top_10 (list): Lista de tuplas (pelicula, genero) del top 10
+      """
+      
+      while True:
+            
 def main():
       
       """Función pirncipal del programa"""
